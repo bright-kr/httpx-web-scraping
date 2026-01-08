@@ -1,84 +1,84 @@
-# Web Scraping With HTTPX in Python
+# Python에서 HTTPX로 Webスクレイピング하기
 
-[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.com/) 
+[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.co.kr/) 
 
-This guide explains how to use HTTPX, a powerful Python HTTP client, for web scraping:
+이 가이드는 강력한 Python HTTP 클라이언트인 HTTPX를 사용하여 Webスクレイピング하는 방법을 설명합니다:
 
-- [What Is HTTPX?](#what-is-httpx)
-- [Scraping with HTTPX: Step-By-Step Guide](#scraping-with-httpx-step-by-step-guide)
-  - [Step #1: Project Setup](#step-1-project-setup)
-  - [Step #2: Install the Scraping Libraries](#step-2-install-the-scraping-libraries)
-  - [Step #3: Retrieve the HTML of the Target Page](#step-3-retrieve-the-html-of-the-target-page)
-  - [Step #4: Parse the HTML](#step-4-parse-the-html)
-  - [Step #5: Scrape Data From It](#step-5-scrape-data-from-it)
-  - [Step #6: Export the Scraped Data](#step-6-export-the-scraped-data)
-  - [Step #7: Put It All Together](#step-7-put-it-all-together)
-- [HTTPX Web Scraping Advanced Features and Techniques](#httpx-web-scraping-advanced-features-and-techniques)
-  - [Set Custom Headers](#set-custom-headers)
-  - [Set a Custom User Agent](#set-a-custom-user-agent)
-  - [Set Cookies](#set-cookies)
-  - [Proxy Integration](#proxy-integration)
-  - [Error Handling](#error-handling)
-  - [Session Handling](#session-handling)
+- [HTTPX란 무엇인가요?](#what-is-httpx)
+- [HTTPX로 スクレイピング하기: 단계별 가이드](#scraping-with-httpx-step-by-step-guide)
+  - [단계 #1: 프로젝트 설정](#step-1-project-setup)
+  - [단계 #2: スクレイピング 라이브러리 설치](#step-2-install-the-scraping-libraries)
+  - [단계 #3: 대상 페이지의 HTML 가져오기](#step-3-retrieve-the-html-of-the-target-page)
+  - [단계 #4: HTML 파싱](#step-4-parse-the-html)
+  - [단계 #5: 데이터 スクレイピング](#step-5-scrape-data-from-it)
+  - [단계 #6: スクレイ핑한 데이터 내보내기](#step-6-export-the-scraped-data)
+  - [단계 #7: 모두 합치기](#step-7-put-it-all-together)
+- [HTTPX Webスクレイピング 고급 기능 및 기법](#httpx-web-scraping-advanced-features-and-techniques)
+  - [커스텀 ヘッダー 설정](#set-custom-headers)
+  - [커스텀 User Agent 설정](#set-a-custom-user-agent)
+  - [Cookie 설정](#set-cookies)
+  - [プロキシ 통합](#proxy-integration)
+  - [에러 처리](#error-handling)
+  - [セッション 처리](#session-handling)
   - [Async API](#async-api)
-  - [Retry Failed Requests](#retry-failed-requests)
-- [HTTPX vs Requests for Web Scraping](#httpx-vs-requests-for-web-scraping)
-- [Conclusion](#conclusion)
+  - [실패한 リクエスト リトライ](#retry-failed-requests)
+- [Webスクレイピング에서 HTTPX vs Requests](#httpx-vs-requests-for-web-scraping)
+- [결론](#conclusion)
 
 
 ## What Is HTTPX?
 
-[HTTPX](https://github.com/projectdiscovery/httpx) is a fully featured HTTP client for Python 3, built on top of the [`httpcore`](https://pypi.org/project/httpcore/) library. It is built to deliver reliable performance even under heavy multithreading. HTTPX offers both synchronous and asynchronous APIs, supporting HTTP/1.1 and HTTP/2 protocols.
+[HTTPX](https://github.com/projectdiscovery/httpx)는 [`httpcore`](https://pypi.org/project/httpcore/) 라이브러리 위에 구축된, 완전한 기능을 갖춘 Python 3용 HTTP 클라이언트입니다. 고부하 멀티스레딩 환경에서도 신뢰할 수 있는 성능을 제공하도록 설계되었습니다. HTTPX는 동기 및 비동기 API를 모두 제공하며, HTTP/1.1 및 HTTP/2 프로토콜을 지원합니다.
 
 **Features**
 
-- **Simple and Modular Codebase**: Designed for ease of contribution and extension.
-- **Fast and Configurable**: Offers fully customizable flags for probing multiple elements.
-- **Versatile Probing Methods**: Supports various HTTP-based probing techniques.
-- **Automatic Protocol Fallback**: Defaults to smart fallback from HTTPS to HTTP.
-- **Flexible Input Options**: Accepts hosts, URLs, and CIDR as input.
-- **Advanced Features**: Includes support for proxies, custom HTTP headers, configurable timeouts, basic authentication, and more.
+- **간단하고 모듈식 코드베이스**: 기여와 확장이 쉽도록 설계되었습니다.
+- **빠르고 구성 가능**: 여러 요소를 프로빙하기 위한 완전 맞춤형 플래그를 제공합니다.
+- **다양한 프로빙 방식**: 다양한 HTTP 기반 프로빙 기법을 지원합니다.
+- **자동 프로토콜 폴백**: 기본적으로 HTTPS에서 HTTP로 스마트 폴백합니다.
+- **유연한 입력 옵션**: host, URL, CIDR을 입력으로 받을 수 있습니다.
+- **고급 기능**: プロキシ, 커스텀 HTTP ヘッダー, 구성 가능한 タイムアウト, 기본 認証 등 다양한 기능을 지원합니다.
 
 **Pros**
 
-- **Command-Line Availability**: Accessible via [`httpx[cli]`](https://pypi.org/project/httpx/).
-- **Feature-Rich**: Includes support for HTTP/2 and an asynchronous API.
-- **Actively Developed**: Continuously improved with regular updates.
+- **커맨드라인 사용 가능**: [`httpx[cli]`](https://pypi.org/project/httpx/)를 통해 접근할 수 있습니다.
+- **풍부한 기능**: HTTP/2 및 비동기 API 지원을 포함합니다.
+- **활발한 개발**: 정기적인 업데이트로 지속적으로 개선됩니다.
 
 **Cons**
 
-- **Frequent Updates**: New releases may introduce breaking changes.
-- **Less Popular**: Not as widely used as the [`requests`](https://requests.readthedocs.io/en/latest/) library.
+- **잦은 업데이트**: 새 릴리스에서 호환성이 깨지는 변경이 도입될 수 있습니다.
+- **낮은 대중성**: [`requests`](https://requests.readthedocs.io/en/latest/) 라이브러리만큼 널리 사용되지는 않습니다.
 
 ## Scraping with HTTPX: Step-By-Step Guide
 
-HTTPX is an HTTP client, so parse and extract data from the HTML it retrieved, you will need an HTML parser like [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/).
+HTTPX는 HTTP 클라이언트이므로, 가져온 HTML에서 데이터를 파싱하고 추출하려면 [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) 같은 HTML 파서가 필요합니다.
 
 > **Warning**:\
-> While HTTPX is only used in the early stages of the process, we will walk you through a complete workflow. If you are interested in more advanced HTTPX scraping techniques, you can skip ahead to the next chapter after Step 3.
+> HTTPX는 프로세스의 초기 단계에서만 사용되지만, 전체 워크플로를 안내해 드립니다. 더 고급 HTTPX スクレイピング 기법에 관심이 있으시다면, Step 3 이후 다음 장으로 건너뛰어도 됩니다.
 
 ### Step #1: Project Setup
 
-Install Python 3+ on your machine and create a directory for your HTTPX scraping project:
+머신에 Python 3+를 설치하고 HTTPX スクレイピング 프로젝트용 디렉터리를 생성합니다:
 
 ```bash
 mkdir httpx-scraper
 ```
 
-Navigate into it and initialize a [virtual environment](https://docs.python.org/3/library/venv.html):
+해당 디렉터리로 이동한 다음 [가상 환경](https://docs.python.org/3/library/venv.html)을 초기화합니다:
 
 ```bash
 cd httpx-scraper
 python -m venv env
 ```
 
-Open the project folder in your Python IDE, create a `scraper.py` file inside the folder, then activate the virtual environment. On Linux or macOS, run:
+Python IDE에서 프로젝트 폴더를 열고, 폴더 안에 `scraper.py` 파일을 만든 다음 가상 환경을 활성화합니다. Linux 또는 macOS에서는 다음을 실행합니다:
 
 ```bash
 ./env/bin/activate
 ```
 
-On Windows:
+Windows에서는 다음을 실행합니다:
 
 ```
 env/Scripts/activate
@@ -86,13 +86,13 @@ env/Scripts/activate
 
 ### Step #2: Install the Scraping Libraries
 
-Install HTTPX and BeautifulSoup:
+HTTPX와 BeautifulSoup를 설치합니다:
 
 ```bash
 pip install httpx beautifulsoup4
 ```
 
-Import the added dependencies into your `scraper.py` script:
+추가한 의존성을 `scraper.py` 스크립트로 import합니다:
 
 ```python
 import httpx
@@ -101,25 +101,25 @@ from bs4 import BeautifulSoup
 
 ### Step #3: Retrieve the HTML of the Target Page
 
-In this example, the target page will be the “[Quotes to Scrape](https://quotes.toscrape.com/)” site:
+이 예제에서 대상 페이지는 “[Quotes to Scrape](https://quotes.toscrape.com/)” 사이트입니다:
 
 ![The Quotes To Scrape homepage](https://github.com/luminati-io/httpx-web-scraping/blob/main/Images/image-70.png)
 
-Use HTTPX to retrieve the HTML of the homepage with the `get()` method:
+HTTPX의 `get()` 메서드를 사용하여 홈 페이지의 HTML을 가져옵니다:
 
 ```python
 # Make an HTTP GET request to the target page
 response = httpx.get("http://quotes.toscrape.com")
 ```
 
-Behind the scenes, HTTPX will perform an HTTP GET request to the server, which will respond with the page's HTML. You can access the HTML content using the `response.text` attribute:
+내부적으로 HTTPX는 서버에 HTTP GET リクエスト를 수행하며, 서버는 페이지의 HTML로 응답합니다. `response.text` 속성을 사용하여 HTML 콘텐츠에 접근할 수 있습니다:
 
 ```python
 html = response.text
 print(html)
 ```
 
-This will print the raw HTML content:
+이는 원시 HTML 콘텐츠를 출력합니다:
 
 ```html
 <!DOCTYPE html>
@@ -138,18 +138,18 @@ This will print the raw HTML content:
 
 ### Step #4: Parse the HTML
 
-Feed the HTML content to the BeautifulSoup constructor to parse it:
+BeautifulSoup 생성자에 HTML 콘텐츠를 전달하여 파싱합니다:
 
 ```python
 # Parse the HTML content using
  soup = BeautifulSoup(html, "html.parser")
 ```
 
-The `soup` variable now holds the parsed HTML and exposes the methods to extract the data.
+이제 `soup` 변수에는 파싱된 HTML이 들어 있으며, 데이터 추출을 위한 메서드가 제공됩니다.
 
 ### Step #5: Scrape Data From It
 
-Scrape quotes data from the page:
+페이지에서 인용구 데이터를 スクレイピング합니다:
 
 ```python
 # Where to store the scraped data
@@ -172,11 +172,11 @@ for quote_element in quote_elements:
     })
 ```
 
-This snippet defines a list named `quotes` to store the scraped data. It then selects all quote HTML elements and loops through them to extract the quote text, author, and tags. Each extracted quote is stored as a dictionary within the `quotes` list, organizing the data for further use or export.
+이 스니펫은 スクレイピング한 데이터를 저장하기 위해 `quotes`라는 리스트를 정의합니다. 그런 다음 모든 인용구 HTML 요소를 선택하고 루프를 돌면서 인용문 텍스트, 저자, 태그를 추출합니다. 추출된 각 인용구는 `quotes` 리스트 안에서 딕셔너리로 저장되어, 이후 사용 또는 내보내기를 위한 데이터 구조를 갖추게 됩니다.
 
 ### Step #6: Export the Scraped Data
 
-Export the scraped data to a CSV file:
+スクレイピング한 데이터를 CSV 파일로 내보냅니다:
 
 ```python
 # Specify the file name for export
@@ -190,9 +190,9 @@ with open("quotes.csv", mode="w", newline="", encoding="utf-8") as file:
     writer.writerows(quotes)
 ```
 
-This snippet opens a file named `quotes.csv` in write mode, defines column headers (`text`, `author`, `tags`), writes the headers to the file, and then writes each dictionary from the `quotes` list to the CSV file. The `csv.DictWriter` handles the formatting, making it easy to store structured data.
+이 스니펫은 `quotes.csv`라는 파일을 쓰기 모드로 열고, 컬럼 헤더(`text`, `author`, `tags`)를 정의한 뒤, 파일에 헤더를 기록하고 `quotes` 리스트의 각 딕셔너리를 CSV 파일에 작성합니다. `csv.DictWriter`가 포맷팅을 처리하므로 구조화된 데이터를 쉽게 저장할 수 있습니다.
 
-Import `csv` from the Python Standard Library:
+Python 표준 라이브러리에서 `csv`를 import합니다:
 
 ```python
 import csv
@@ -200,7 +200,7 @@ import csv
 
 ### Step #7: Put It All Together
 
-The final HTTPX web scraping script will contain the following code:
+최종 HTTPX Webスクレイピング 스크립트에는 다음 코드가 포함됩니다:
 
 ```python
 import httpx
@@ -246,29 +246,29 @@ with open("quotes.csv", mode="w", newline="", encoding="utf-8") as file:
     writer.writerows(quotes)
 ```
 
-Execute it with:
+다음으로 실행합니다:
 
 ```bash
 python scraper.py
 ```
 
-Or, on Linux/macOS:
+또는 Linux/macOS에서는 다음을 실행합니다:
 
 ```bash
 python3 scraper.py
 ```
 
-A `quotes.csv` file will appear in the root folder of your project withthe following contents:
+프로젝트 루트 폴더에 다음 내용이 포함된 `quotes.csv` 파일이 생성됩니다:
 
 ![The CSV containing the scraped data](https://github.com/luminati-io/httpx-web-scraping/blob/main/Images/image-71.png)
 
 ## HTTPX Web Scraping Advanced Features and Techniques
 
-Let's use a more complex example. The target site will be the [HTTPBin.io `/anything` endpoint](https://httpbin.io/anything). This is a special API that returns the IP address, headers, and other information sent by the caller.
+더 복잡한 예제를 사용해 보겠습니다. 대상 사이트는 [HTTPBin.io `/anything` endpoint](https://httpbin.io/anything)입니다. 이는 호출자가 전송한 IPアドレス, ヘッダー 및 기타 정보를 반환하는 특수 API입니다.
 
 ### Set Custom Headers
 
-HTTPX allows you to [specify custom headers](https://www.python-httpx.org/quickstart/#custom-headers) using the `headers` argument:
+HTTPX는 `headers` 인수를 사용하여 [커스텀 ヘッダー를 지정](https://www.python-httpx.org/quickstart/#custom-headers)할 수 있습니다:
 
 ```python
 import httpx
@@ -286,15 +286,15 @@ response = httpx.get("https://httpbin.io/anything", headers=headers)
 
 ### Set a Custom User Agent
 
-[`User-Agent`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) is one of the most important [HTTP headers for web scraping](/blog/web-data/http-headers-for-web-scraping). By default, HTTPX uses the following `User-Agent`:
+[`User-Agent`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent)는 [Webスクレイピング을 위한 가장 중요한 HTTP ヘッダー](/blog/web-data/http-headers-for-web-scraping) 중 하나입니다. 기본적으로 HTTPX는 다음 `User-Agent`를 사용합니다:
 
 ```
 python-httpx/<VERSION>
 ```
 
-This value can easily indicate that your requests are automated, potentially resulting in the target site blocking them.
+이 값은 リクエスト가 자동화되었음을 쉽게 드러낼 수 있으며, 그 결과 대상 사이트가 이를 차단할 가능성이 있습니다.
 
-To avoid that, you can set a custom `User-Agent` to mimic a real browser, like so:
+이를 피하기 위해, 다음과 같이 실제 브라우저를 모방하도록 커스텀 `User-Agent`를 설정할 수 있습니다:
 
 ```python
 import httpx
@@ -311,7 +311,7 @@ response = httpx.get("https://httpbin.io/anything", headers=headers)
 
 ### Set Cookies
 
-Set cookies in HTTPX using the [`cookies` argument](https://www.python-httpx.org/quickstart/#cookies):
+[`cookies` 인수](https://www.python-httpx.org/quickstart/#cookies)를 사용하여 HTTPX에서 Cookie를 설정합니다:
 
 ```python
 import httpx
@@ -327,11 +327,11 @@ response = httpx.get("https://httpbin.io/anything", cookies=cookies)
 # Handle the response...
 ```
 
-This gives you the ability to include session data required for your web scraping requests.
+이를 통해 Webスクレイピング リクエスト에 필요한 セッション 데이터를 포함할 수 있습니다.
 
 ### Proxy Integration
 
-Now [route your HTTPX requests through a proxy](https://www.python-httpx.org/advanced/proxies/) to protect your identity and avoid IP bans while performing web scraping. To doo that, use the `proxies` argument:
+Webスクレイピング 수행 중 신원을 보호하고 IPアドレス 밴을 피하기 위해 [HTTPX リクエスト를 プロキシ로 라우팅](https://www.python-httpx.org/advanced/proxies/)합니다. 이를 위해 `proxies` 인수를 사용합니다:
 
 ```python
 import httpx
@@ -346,7 +346,7 @@ response = httpx.get("https://httpbin.io/anything", proxy=proxy)
 
 ### Error Handling
 
-By default, HTTPX raises errors only for [connection or network issues](https://www.python-httpx.org/exceptions/). To raise exceptions also for HTTP responses with [`4xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses) and [`5xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) status codes,use the `raise_for_status()` method as below:
+기본적으로 HTTPX는 [연결 또는 네트워크 이슈](https://www.python-httpx.org/exceptions/)에 대해서만 에러를 발생시킵니다. [`4xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses) 및 [`5xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) 상태 코드의 HTTP レスポンス에 대해서도 예외를 발생시키려면, 아래와 같이 `raise_for_status()` 메서드를 사용합니다:
 
 ```python
 import httpx
@@ -367,23 +367,23 @@ except httpx.RequestError as e:
 ### Session Handling
 
 
-When using the top-level API in HTTPX, a new connection is created for each request, meaning TCP connections are not reused. This approach becomes inefficient as the number of requests to a host increases.
+HTTPX에서 top-level API를 사용하면 각 リクエ스트마다 새로운 연결이 생성되며, 즉 TCP 연결이 재사용되지 않습니다. 이 접근 방식은 호스트에 대한 リクエ스트 수가 증가할수록 비효율적이 됩니다.
 
-Meanwhile, using a `httpx.Client` instance enables [HTTP connection pooling](https://devblogs.microsoft.com/premier-developer/the-art-of-http-connection-pooling-how-to-optimize-your-connections-for-peak-performance/). This means that multiple requests to the same host can reuse an existing TCP connection instead of creating a new one for each request.
+반면 `httpx.Client` 인스턴스를 사용하면 [HTTP connection pooling](https://devblogs.microsoft.com/premier-developer/the-art-of-http-connection-pooling-how-to-optimize-your-connections-for-peak-performance/)을 활성화할 수 있습니다. 이는 동일한 호스트로 여러 リクエ스트를 보낼 때, 매번 새로운 TCP 연결을 생성하는 대신 기존 TCP 연결을 재사용할 수 있음을 의미합니다.
 
-Here are some of the benefits of using a `Client` over the top-level API:
+top-level API 대신 `Client`를 사용할 때의 이점은 다음과 같습니다:
 
-- Reduced latency across requests, because there is no repeated handshaking
-- Lower CPU usage and fewer round-trips
-- Decreased network traffic
+- 반복적인 핸드셰이크가 없으므로 リクエ스트 전반의 레이턴시 감소
+- CPU 사용량 감소 및 왕복(round-trip) 횟수 감소
+- 네트워크 트래픽 감소
 
-Additionally, `Client` instances support session handling with features unavailable in the top-level API, including:
+또한 `Client` 인스턴스는 top-level API에는 없는 기능을 포함하여 セッション 처리를 지원합니다:
 
-- Cookie persistence across requests
-- Applying configuration across all outgoing requests
-- Sending requests through HTTP proxies
+- リクエ스트 간 Cookie 지속성
+- 모든 발신 リクエ스트에 설정 적용
+- HTTP プロキ시를 통한 リクエ스트 전송
 
-It is typically recommended to use a `Client` in HTTPX with a context manager (`with` statement):
+일반적으로 HTTPX에서는 컨텍스트 매니저(`with` 문)와 함께 `Client`를 사용하는 것이 권장됩니다:
 
 ```python
 import httpx
@@ -397,7 +397,7 @@ with httpx.Client() as client:
     print(response_data)
 ```
 
-Alternatively, you can manually manage the client and close the connection pool explicitly with `client.close()`:
+또는 클라이언트를 수동으로 관리하고 `client.close()`로 connection pool을 명시적으로 닫을 수 있습니다:
 
 ```python
 import httpx
@@ -419,13 +419,13 @@ finally:
 ```
 
 > **Note**:\
-> If you are familiar with the `requests` library, `httpx.Client()` serves a similar purpose to [`requests.Session()`](https://requests.readthedocs.io/en/latest/user/advanced/#session-objects).
+> `requests` 라이브러리에 익숙하시다면, `httpx.Client()`는 [`requests.Session()`](https://requests.readthedocs.io/en/latest/user/advanced/#session-objects)과 유사한 목적을 수행합니다.
 
 ### Async API
 
-By default, HTTPX exposes a standard synchronous API. At the same time, it also offers an [asynchronous client](https://www.python-httpx.org/async/) for when it's required. If you are working with [`asyncio`](https://docs.python.org/3/library/asyncio.html), using an async client is essential for sending outgoing HTTP requests efficiently.
+기본적으로 HTTPX는 표준 동기 API를 노출합니다. 동시에, 필요할 때 사용할 수 있는 [비동기 클라이언트](https://www.python-httpx.org/async/)도 제공합니다. [`asyncio`](https://docs.python.org/3/library/asyncio.html)로 작업하는 경우, 효율적으로 발신 HTTP リクエ스트를 전송하기 위해 async 클라이언트 사용이 필수적입니다.
 
-To make asynchronous requests in HTTPX, initialize `AsyncClient` and use it to make a GET request as shown below:
+HTTPX에서 비동기 リクエ스트를 수행하려면 `AsyncClient`를 초기화한 뒤, 아래와 같이 이를 사용하여 GET リクエ스트를 보냅니다:
 
 ```python
 import httpx
@@ -445,15 +445,15 @@ async def main():
 asyncio.run(main())
 ```
 
-The [`with`](https://docs.python.org/3/reference/compound_stmts.html#with) statement ensures the client is automatically closed when the block ends. Alternatively, if you manage the client manually, you can close it explicitly with `await client.close()`.
+[`with`](https://docs.python.org/3/reference/compound_stmts.html#with) 문은 블록이 끝날 때 클라이언트가 자동으로 닫히도록 보장합니다. 또는 클라이언트를 수동으로 관리하는 경우 `await client.close()`로 명시적으로 닫을 수 있습니다.
 
-All HTTPX request methods (`get()`, `post()`, etc.) are asynchronous when using an `AsyncClient`. Therefore, you must add `await` before calling them to get a response.
+`AsyncClient`를 사용할 때는 모든 HTTPX リクエ스트 메서드(`get()`, `post()` 등)가 비동기입니다. 따라서 レスポンス를 얻기 위해 호출 전에 반드시 `await`를 추가해야 합니다.
 
 ### Retry Failed Requests
 
-Network instability during web scraping may result in connection failures or timeouts. HTTPX simplifies handling such issues via its [`HTTPTransport`](https://www.python-httpx.org/advanced/transports/) interface. This mechanism retries requests when an `httpx.ConnectError` or `httpx.ConnectTimeout` occurs.
+Webスクレイピング 중 네트워크 불안정으로 인해 연결 실패 또는 タイムアウト이 발생할 수 있습니다. HTTPX는 [`HTTPTransport`](https://www.python-httpx.org/advanced/transports/) 인터페이스를 통해 이러한 이슈 처리를 단순화합니다. 이 메커니즘은 `httpx.ConnectError` 또는 `httpx.ConnectTimeout`이 발생할 때 リクエ스트를 リトライ합니다.
 
-The following code demonstrates how to configure a transport to retry requests up to 3 times:
+다음 코드는 최대 3회까지 リクエ스트를 リトライ하도록 transport를 구성하는 방법을 보여줍니다:
 
 ```python
 import httpx
@@ -468,11 +468,11 @@ with httpx.Client(transport=transport) as client:
     # Handle the response...
 ```
 
-Only connection-related errors trigger a retry. To handle read/write errors or specific HTTP status codes, you need to implement custom retry logic with libraries like [`tenacity`](https://tenacity.readthedocs.io/en/latest/).
+연결 관련 에러만 リト라이를 트리거합니다. read/write 에러 또는 특정 HTTP 상태 코드를 처리하려면 [`tenacity`](https://tenacity.readthedocs.io/en/latest/) 같은 라이브러리로 커스텀 リトライ 로직을 구현해야 합니다.
 
 ## HTTPX vs Requests for Web Scraping
 
-The following table compares HTTPX and [Requests for web scraping](/blog/web-data/python-requests-guide):
+다음 표는 HTTPX와 [Webスクレイピング을 위한 Requests](/blog/web-data/python-requests-guide)를 비교합니다:
 
 | **Feature** | **HTTPX** | **Requests** |
 | --- | --- | --- |
@@ -483,20 +483,20 @@ The following table compares HTTPX and [Requests for web scraping](/blog/web-dat
 | **User-agent customization** | ✔️  | ✔️  |
 | **Proxy support** | ✔️  | ✔️  |
 | **Cookie handling** | ✔️  | ✔️  |
-| **Timeouts** | Customizable for connection and read | Customizable for connection and read |
-| **Retry mechanism** | Available via transports | Available via `HTTPAdapter`s |
-| **Performance** | High | Medium |
-| **Community support and popularity** | Growing | Large |
+| **Timeouts** | 연결 및 읽기에 대해 커스터마이즈 가능 | 연결 및 읽기에 대해 커스터마이즈 가능 |
+| **Retry mechanism** | transports를 통해 사용 가능 | `HTTPAdapter`s를 통해 사용 가능 |
+| **Performance** | 높음 | 중간 |
+| **Community support and popularity** | 성장 중 | 큼 |
 
 ## Conclusion
 
-Automated HTTP requests expose your public IP address, potentially revealing your identity and location, which compromises your privacy. To enhance your security and privacy, use a proxy server to hide your IP address.
+자동화된 HTTP リクエ스트는 공개 IPアドレス를 노출하여 신원과 위치가 드러날 수 있으며, 이는 프라이버시를 침해합니다. 보안과 프라이버시를 강화하려면 プロキシ 서버를 사용하여 IPアドレス를 숨기십시오.
 
-Bright Data controls the best proxy servers in the world, serving Fortune 500 companies and more than 20,000 customers. Its offer includes a wide range of proxy types:
+Bright Data는 전 세계 최고의 プロキシ 서버를 운영하며, Fortune 500 기업과 20,000명 이상의 고객에게 서비스를 제공하고 있습니다. 제공 범위에는 다양한 プロキ시 유형이 포함됩니다:
 
-- [Datacenter proxies](https://brightdata.com/proxy-types/datacenter-proxies) – Over 770,000 datacenter IPs.
-- [Residential proxies](https://brightdata.com/proxy-types/residential-proxies) – Over 72M residential IPs in more than 195 countries.
-- [ISP proxies](https://brightdata.com/proxy-types/isp-proxies) – Over 700,000 ISP IPs.
-- [Mobile proxies](https://brightdata.com/proxy-types/mobile-proxies) – Over 7M mobile IPs.
+- [Datacenter proxies](https://brightdata.co.kr/proxy-types/datacenter-proxies) – 770,000개 이상의 データセンタープロキシ IP.
+- [Residential proxies](https://brightdata.co.kr/proxy-types/residential-proxies) – 195개 이상의 국가에서 7,200만 개 이상의 レジデンシャルプロキシ IP.
+- [ISP proxies](https://brightdata.co.kr/proxy-types/isp-proxies) – 700,000개 이상의 ISPプロキシ IP.
+- [Mobile proxies](https://brightdata.co.kr/proxy-types/mobile-proxies) – 700만 개 이상의 モバイルプロキシ IP.
 
-Create a free Bright Data account today to test our scraping solutions and proxies!
+지금 무료 Bright Data 계정을 생성하여 당사의 スクレイピング 솔루션과 プロキシ를 테스트해 보십시오!
