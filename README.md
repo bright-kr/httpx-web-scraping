@@ -1,6 +1,6 @@
 # Python에서 HTTPX로 Webスクレイピング하기
 
-[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.co.kr/) 
+[![Promo](https://github.com/bright-kr/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.co.kr/) 
 
 이 가이드는 강력한 Python HTTP 클라이언트인 HTTPX를 사용하여 Webスクレイピング하는 방법을 설명합니다:
 
@@ -103,7 +103,7 @@ from bs4 import BeautifulSoup
 
 이 예제에서 대상 페이지는 “[Quotes to Scrape](https://quotes.toscrape.com/)” 사이트입니다:
 
-![The Quotes To Scrape homepage](https://github.com/luminati-io/httpx-web-scraping/blob/main/Images/image-70.png)
+![The Quotes To Scrape homepage](https://github.com/bright-kr/httpx-web-scraping/blob/main/Images/image-70.png)
 
 HTTPX의 `get()` 메서드를 사용하여 홈 페이지의 HTML을 가져옵니다:
 
@@ -260,7 +260,7 @@ python3 scraper.py
 
 프로젝트 루트 폴더에 다음 내용이 포함된 `quotes.csv` 파일이 생성됩니다:
 
-![The CSV containing the scraped data](https://github.com/luminati-io/httpx-web-scraping/blob/main/Images/image-71.png)
+![The CSV containing the scraped data](https://github.com/bright-kr/httpx-web-scraping/blob/main/Images/image-71.png)
 
 ## HTTPX Web Scraping Advanced Features and Techniques
 
