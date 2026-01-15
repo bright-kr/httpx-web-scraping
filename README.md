@@ -1,28 +1,28 @@
-# Python에서 HTTPX로 Webスクレイピング하기
+# Python에서 HTTPX로 Web스크레이핑하기
 
 [![Promo](https://github.com/bright-kr/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.co.kr/) 
 
-이 가이드는 강력한 Python HTTP 클라이언트인 HTTPX를 사용하여 Webスクレイピング하는 방법을 설명합니다:
+이 가이드는 강력한 Python HTTP 클라이언트인 HTTPX를 사용하여 Web스크레이핑하는 방법을 설명합니다:
 
 - [HTTPX란 무엇인가요?](#what-is-httpx)
-- [HTTPX로 スクレイピング하기: 단계별 가이드](#scraping-with-httpx-step-by-step-guide)
+- [HTTPX로 스크레이핑하기: 단계별 가이드](#scraping-with-httpx-step-by-step-guide)
   - [단계 #1: 프로젝트 설정](#step-1-project-setup)
-  - [단계 #2: スクレイピング 라이브러리 설치](#step-2-install-the-scraping-libraries)
+  - [단계 #2: 스크레이핑 라이브러리 설치](#step-2-install-the-scraping-libraries)
   - [단계 #3: 대상 페이지의 HTML 가져오기](#step-3-retrieve-the-html-of-the-target-page)
   - [단계 #4: HTML 파싱](#step-4-parse-the-html)
-  - [단계 #5: 데이터 スクレイピング](#step-5-scrape-data-from-it)
+  - [단계 #5: 데이터 스크레이핑](#step-5-scrape-data-from-it)
   - [단계 #6: スクレイ핑한 데이터 내보내기](#step-6-export-the-scraped-data)
   - [단계 #7: 모두 합치기](#step-7-put-it-all-together)
-- [HTTPX Webスクレイピング 고급 기능 및 기법](#httpx-web-scraping-advanced-features-and-techniques)
-  - [커스텀 ヘッダー 설정](#set-custom-headers)
+- [HTTPX Web스크레이핑 고급 기능 및 기법](#httpx-web-scraping-advanced-features-and-techniques)
+  - [커스텀 헤더 설정](#set-custom-headers)
   - [커스텀 User Agent 설정](#set-a-custom-user-agent)
   - [Cookie 설정](#set-cookies)
-  - [プロキシ 통합](#proxy-integration)
+  - [프록시 통합](#proxy-integration)
   - [에러 처리](#error-handling)
-  - [セッション 처리](#session-handling)
+  - [세션 처리](#session-handling)
   - [Async API](#async-api)
-  - [실패한 リクエスト リトライ](#retry-failed-requests)
-- [Webスクレイピング에서 HTTPX vs Requests](#httpx-vs-requests-for-web-scraping)
+  - [실패한 요청 재시도](#retry-failed-requests)
+- [Web스크레이핑에서 HTTPX vs Requests](#httpx-vs-requests-for-web-scraping)
 - [결론](#conclusion)
 
 
@@ -37,7 +37,7 @@
 - **다양한 프로빙 방식**: 다양한 HTTP 기반 프로빙 기법을 지원합니다.
 - **자동 프로토콜 폴백**: 기본적으로 HTTPS에서 HTTP로 스마트 폴백합니다.
 - **유연한 입력 옵션**: host, URL, CIDR을 입력으로 받을 수 있습니다.
-- **고급 기능**: プロキシ, 커스텀 HTTP ヘッダー, 구성 가능한 タイムアウト, 기본 認証 등 다양한 기능을 지원합니다.
+- **고급 기능**: 프록시, 커스텀 HTTP 헤더, 구성 가능한 타임아웃, 기본 인증 등 다양한 기능을 지원합니다.
 
 **Pros**
 
@@ -55,11 +55,11 @@
 HTTPX는 HTTP 클라이언트이므로, 가져온 HTML에서 데이터를 파싱하고 추출하려면 [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) 같은 HTML 파서가 필요합니다.
 
 > **Warning**:\
-> HTTPX는 프로세스의 초기 단계에서만 사용되지만, 전체 워크플로를 안내해 드립니다. 더 고급 HTTPX スクレイピング 기법에 관심이 있으시다면, Step 3 이후 다음 장으로 건너뛰어도 됩니다.
+> HTTPX는 프로세스의 초기 단계에서만 사용되지만, 전체 워크플로를 안내해 드립니다. 더 고급 HTTPX 스크레이핑 기법에 관심이 있으시다면, Step 3 이후 다음 장으로 건너뛰어도 됩니다.
 
 ### Step #1: Project Setup
 
-머신에 Python 3+를 설치하고 HTTPX スクレイピング 프로젝트용 디렉터리를 생성합니다:
+머신에 Python 3+를 설치하고 HTTPX 스크레이핑 프로젝트용 디렉터리를 생성합니다:
 
 ```bash
 mkdir httpx-scraper
@@ -112,7 +112,7 @@ HTTPX의 `get()` 메서드를 사용하여 홈 페이지의 HTML을 가져옵니
 response = httpx.get("http://quotes.toscrape.com")
 ```
 
-내부적으로 HTTPX는 서버에 HTTP GET リクエスト를 수행하며, 서버는 페이지의 HTML로 응답합니다. `response.text` 속성을 사용하여 HTML 콘텐츠에 접근할 수 있습니다:
+내부적으로 HTTPX는 서버에 HTTP GET 요청를 수행하며, 서버는 페이지의 HTML로 응답합니다. `response.text` 속성을 사용하여 HTML 콘텐츠에 접근할 수 있습니다:
 
 ```python
 html = response.text
@@ -149,7 +149,7 @@ BeautifulSoup 생성자에 HTML 콘텐츠를 전달하여 파싱합니다:
 
 ### Step #5: Scrape Data From It
 
-페이지에서 인용구 데이터를 スクレイピング합니다:
+페이지에서 인용구 데이터를 스크레이핑합니다:
 
 ```python
 # Where to store the scraped data
@@ -172,11 +172,11 @@ for quote_element in quote_elements:
     })
 ```
 
-이 스니펫은 スクレイピング한 데이터를 저장하기 위해 `quotes`라는 리스트를 정의합니다. 그런 다음 모든 인용구 HTML 요소를 선택하고 루프를 돌면서 인용문 텍스트, 저자, 태그를 추출합니다. 추출된 각 인용구는 `quotes` 리스트 안에서 딕셔너리로 저장되어, 이후 사용 또는 내보내기를 위한 데이터 구조를 갖추게 됩니다.
+이 스니펫은 스크레이핑한 데이터를 저장하기 위해 `quotes`라는 리스트를 정의합니다. 그런 다음 모든 인용구 HTML 요소를 선택하고 루프를 돌면서 인용문 텍스트, 저자, 태그를 추출합니다. 추출된 각 인용구는 `quotes` 리스트 안에서 딕셔너리로 저장되어, 이후 사용 또는 내보내기를 위한 데이터 구조를 갖추게 됩니다.
 
 ### Step #6: Export the Scraped Data
 
-スクレイピング한 데이터를 CSV 파일로 내보냅니다:
+스크레이핑한 데이터를 CSV 파일로 내보냅니다:
 
 ```python
 # Specify the file name for export
@@ -200,7 +200,7 @@ import csv
 
 ### Step #7: Put It All Together
 
-최종 HTTPX Webスクレイピング 스크립트에는 다음 코드가 포함됩니다:
+최종 HTTPX Web스크레이핑 스크립트에는 다음 코드가 포함됩니다:
 
 ```python
 import httpx
@@ -264,11 +264,11 @@ python3 scraper.py
 
 ## HTTPX Web Scraping Advanced Features and Techniques
 
-더 복잡한 예제를 사용해 보겠습니다. 대상 사이트는 [HTTPBin.io `/anything` endpoint](https://httpbin.io/anything)입니다. 이는 호출자가 전송한 IPアドレス, ヘッダー 및 기타 정보를 반환하는 특수 API입니다.
+더 복잡한 예제를 사용해 보겠습니다. 대상 사이트는 [HTTPBin.io `/anything` endpoint](https://httpbin.io/anything)입니다. 이는 호출자가 전송한 IP 주소, 헤더 및 기타 정보를 반환하는 특수 API입니다.
 
 ### Set Custom Headers
 
-HTTPX는 `headers` 인수를 사용하여 [커스텀 ヘッダー를 지정](https://www.python-httpx.org/quickstart/#custom-headers)할 수 있습니다:
+HTTPX는 `headers` 인수를 사용하여 [커스텀 헤더를 지정](https://www.python-httpx.org/quickstart/#custom-headers)할 수 있습니다:
 
 ```python
 import httpx
@@ -286,13 +286,13 @@ response = httpx.get("https://httpbin.io/anything", headers=headers)
 
 ### Set a Custom User Agent
 
-[`User-Agent`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent)는 [Webスクレイピング을 위한 가장 중요한 HTTP ヘッダー](/blog/web-data/http-headers-for-web-scraping) 중 하나입니다. 기본적으로 HTTPX는 다음 `User-Agent`를 사용합니다:
+[`User-Agent`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent)는 [Web스크레이핑을 위한 가장 중요한 HTTP 헤더](/blog/web-data/http-headers-for-web-scraping) 중 하나입니다. 기본적으로 HTTPX는 다음 `User-Agent`를 사용합니다:
 
 ```
 python-httpx/<VERSION>
 ```
 
-이 값은 リクエスト가 자동화되었음을 쉽게 드러낼 수 있으며, 그 결과 대상 사이트가 이를 차단할 가능성이 있습니다.
+이 값은 요청가 자동화되었음을 쉽게 드러낼 수 있으며, 그 결과 대상 사이트가 이를 차단할 가능성이 있습니다.
 
 이를 피하기 위해, 다음과 같이 실제 브라우저를 모방하도록 커스텀 `User-Agent`를 설정할 수 있습니다:
 
@@ -327,11 +327,11 @@ response = httpx.get("https://httpbin.io/anything", cookies=cookies)
 # Handle the response...
 ```
 
-이를 통해 Webスクレイピング リクエスト에 필요한 セッション 데이터를 포함할 수 있습니다.
+이를 통해 Web스크레이핑 요청에 필요한 세션 데이터를 포함할 수 있습니다.
 
 ### Proxy Integration
 
-Webスクレイピング 수행 중 신원을 보호하고 IPアドレス 밴을 피하기 위해 [HTTPX リクエスト를 プロキシ로 라우팅](https://www.python-httpx.org/advanced/proxies/)합니다. 이를 위해 `proxies` 인수를 사용합니다:
+Web스크레이핑 수행 중 신원을 보호하고 IP 주소 밴을 피하기 위해 [HTTPX 요청를 프록시로 라우팅](https://www.python-httpx.org/advanced/proxies/)합니다. 이를 위해 `proxies` 인수를 사용합니다:
 
 ```python
 import httpx
@@ -346,7 +346,7 @@ response = httpx.get("https://httpbin.io/anything", proxy=proxy)
 
 ### Error Handling
 
-기본적으로 HTTPX는 [연결 또는 네트워크 이슈](https://www.python-httpx.org/exceptions/)에 대해서만 에러를 발생시킵니다. [`4xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses) 및 [`5xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) 상태 코드의 HTTP レスポンス에 대해서도 예외를 발생시키려면, 아래와 같이 `raise_for_status()` 메서드를 사용합니다:
+기본적으로 HTTPX는 [연결 또는 네트워크 이슈](https://www.python-httpx.org/exceptions/)에 대해서만 에러를 발생시킵니다. [`4xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses) 및 [`5xx`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) 상태 코드의 HTTP 응답에 대해서도 예외를 발생시키려면, 아래와 같이 `raise_for_status()` 메서드를 사용합니다:
 
 ```python
 import httpx
@@ -377,7 +377,7 @@ top-level API 대신 `Client`를 사용할 때의 이점은 다음과 같습니�
 - CPU 사용량 감소 및 왕복(round-trip) 횟수 감소
 - 네트워크 트래픽 감소
 
-또한 `Client` 인스턴스는 top-level API에는 없는 기능을 포함하여 セッション 처리를 지원합니다:
+또한 `Client` 인스턴스는 top-level API에는 없는 기능을 포함하여 세션 처리를 지원합니다:
 
 - リクエ스트 간 Cookie 지속성
 - 모든 발신 リクエ스트에 설정 적용
@@ -447,13 +447,13 @@ asyncio.run(main())
 
 [`with`](https://docs.python.org/3/reference/compound_stmts.html#with) 문은 블록이 끝날 때 클라이언트가 자동으로 닫히도록 보장합니다. 또는 클라이언트를 수동으로 관리하는 경우 `await client.close()`로 명시적으로 닫을 수 있습니다.
 
-`AsyncClient`를 사용할 때는 모든 HTTPX リクエ스트 메서드(`get()`, `post()` 등)가 비동기입니다. 따라서 レスポンス를 얻기 위해 호출 전에 반드시 `await`를 추가해야 합니다.
+`AsyncClient`를 사용할 때는 모든 HTTPX リクエ스트 메서드(`get()`, `post()` 등)가 비동기입니다. 따라서 응답를 얻기 위해 호출 전에 반드시 `await`를 추가해야 합니다.
 
 ### Retry Failed Requests
 
-Webスクレイピング 중 네트워크 불안정으로 인해 연결 실패 또는 タイムアウト이 발생할 수 있습니다. HTTPX는 [`HTTPTransport`](https://www.python-httpx.org/advanced/transports/) 인터페이스를 통해 이러한 이슈 처리를 단순화합니다. 이 메커니즘은 `httpx.ConnectError` 또는 `httpx.ConnectTimeout`이 발생할 때 リクエ스트를 リトライ합니다.
+Web스크레이핑 중 네트워크 불안정으로 인해 연결 실패 또는 타임아웃이 발생할 수 있습니다. HTTPX는 [`HTTPTransport`](https://www.python-httpx.org/advanced/transports/) 인터페이스를 통해 이러한 이슈 처리를 단순화합니다. 이 메커니즘은 `httpx.ConnectError` 또는 `httpx.ConnectTimeout`이 발생할 때 リクエ스트를 재시도합니다.
 
-다음 코드는 최대 3회까지 リクエ스트를 リトライ하도록 transport를 구성하는 방법을 보여줍니다:
+다음 코드는 최대 3회까지 リクエ스트를 재시도하도록 transport를 구성하는 방법을 보여줍니다:
 
 ```python
 import httpx
@@ -468,11 +468,11 @@ with httpx.Client(transport=transport) as client:
     # Handle the response...
 ```
 
-연결 관련 에러만 リト라이를 트리거합니다. read/write 에러 또는 특정 HTTP 상태 코드를 처리하려면 [`tenacity`](https://tenacity.readthedocs.io/en/latest/) 같은 라이브러리로 커스텀 リトライ 로직을 구현해야 합니다.
+연결 관련 에러만 リト라이를 트리거합니다. read/write 에러 또는 특정 HTTP 상태 코드를 처리하려면 [`tenacity`](https://tenacity.readthedocs.io/en/latest/) 같은 라이브러리로 커스텀 재시도 로직을 구현해야 합니다.
 
 ## HTTPX vs Requests for Web Scraping
 
-다음 표는 HTTPX와 [Webスクレイピング을 위한 Requests](/blog/web-data/python-requests-guide)를 비교합니다:
+다음 표는 HTTPX와 [Web스크레이핑을 위한 Requests](/blog/web-data/python-requests-guide)를 비교합니다:
 
 | **Feature** | **HTTPX** | **Requests** |
 | --- | --- | --- |
@@ -490,13 +490,13 @@ with httpx.Client(transport=transport) as client:
 
 ## Conclusion
 
-자동화된 HTTP リクエ스트는 공개 IPアドレス를 노출하여 신원과 위치가 드러날 수 있으며, 이는 프라이버시를 침해합니다. 보안과 프라이버시를 강화하려면 プロキシ 서버를 사용하여 IPアドレス를 숨기십시오.
+자동화된 HTTP リクエ스트는 공개 IP 주소를 노출하여 신원과 위치가 드러날 수 있으며, 이는 프라이버시를 침해합니다. 보안과 프라이버시를 강화하려면 프록시 서버를 사용하여 IP 주소를 숨기십시오.
 
-Bright Data는 전 세계 최고의 プロキシ 서버를 운영하며, Fortune 500 기업과 20,000명 이상의 고객에게 서비스를 제공하고 있습니다. 제공 범위에는 다양한 プロキ시 유형이 포함됩니다:
+Bright Data는 전 세계 최고의 프록시 서버를 운영하며, Fortune 500 기업과 20,000명 이상의 고객에게 서비스를 제공하고 있습니다. 제공 범위에는 다양한 プロキ시 유형이 포함됩니다:
 
-- [Datacenter proxies](https://brightdata.co.kr/proxy-types/datacenter-proxies) – 770,000개 이상의 データセンタープロキシ IP.
-- [Residential proxies](https://brightdata.co.kr/proxy-types/residential-proxies) – 195개 이상의 국가에서 7,200만 개 이상의 レジデンシャルプロキシ IP.
-- [ISP proxies](https://brightdata.co.kr/proxy-types/isp-proxies) – 700,000개 이상의 ISPプロキシ IP.
-- [Mobile proxies](https://brightdata.co.kr/proxy-types/mobile-proxies) – 700만 개 이상의 モバイルプロキシ IP.
+- [Datacenter proxies](https://brightdata.co.kr/proxy-types/datacenter-proxies) – 770,000개 이상의 データセンター프록시 IP.
+- [Residential proxies](https://brightdata.co.kr/proxy-types/residential-proxies) – 195개 이상의 국가에서 7,200만 개 이상의 レジデンシャル프록시 IP.
+- [ISP proxies](https://brightdata.co.kr/proxy-types/isp-proxies) – 700,000개 이상의 ISP프록시 IP.
+- [Mobile proxies](https://brightdata.co.kr/proxy-types/mobile-proxies) – 700만 개 이상의 モバイル프록시 IP.
 
-지금 무료 Bright Data 계정을 생성하여 당사의 スクレイピング 솔루션과 プロキシ를 테스트해 보십시오!
+지금 무료 Bright Data 계정을 생성하여 당사의 스크레이핑 솔루션과 프록시를 테스트해 보십시오!
